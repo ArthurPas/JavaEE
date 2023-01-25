@@ -32,7 +32,11 @@
 
     <dependencies>
         <!-- Dependencies -->
-    
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>5.1.0</version>
+        </dependency>
     
         <!-- Testing dependencies-->
         <dependency>

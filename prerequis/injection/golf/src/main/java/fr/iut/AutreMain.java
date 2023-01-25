@@ -3,13 +3,9 @@ package fr.iut;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-/**
- * Basic implementation
- */
-public class App {
-
+public class AutreMain {
     public static void main(String[] args) {
-        Injector injector = Guice.createInjector(new MainModule());
+        Injector injector = Guice.createInjector(new MainModuleExperimental());
         Caddy caddy = injector.getInstance(Caddy.class);
         Player player = new Player("John", caddy);
         System.out.println(player);
