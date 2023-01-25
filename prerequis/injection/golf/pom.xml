@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
  
     <groupId>fr.iut</groupId>
-    <artifactId>exo2</artifactId>
+    <artifactId>golf</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
  
-    <name>exo2</name>
+    <name>golf</name>
     <url>http://www.example.com</url>
  
     <properties>
@@ -99,26 +99,6 @@
                     </transformers>
                     </configuration>
                 </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <!-- Précise que le plugin s'executera lors du cyle maven "verify" -->
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
                 </executions>
             </plugin>
         </plugins>
