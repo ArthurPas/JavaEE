@@ -27,5 +27,10 @@ public interface RoomDao {
      * @return the room or null if nothing found
      */
     Room findByName(final String name);
-
+    /**
+     * Persists room.
+     *
+     * @param room object to remove
+     */
+    void removeRoom(String name);
 }

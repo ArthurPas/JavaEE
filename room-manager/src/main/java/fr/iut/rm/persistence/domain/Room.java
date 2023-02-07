@@ -20,6 +20,19 @@ public class Room {
      */
     @Column(nullable = false, unique = true)
     private String name;
+    /**
+     * Room's descritpion
+     */
+    @Column
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     /**
      * Default constructor (do nothing)

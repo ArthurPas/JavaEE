@@ -14,6 +14,8 @@ public class RoomDaoTest extends AbstractDaoTest {
 
         Room room = new Room();
         room.setName("TestRoom");
+        room.setDescription("TestDesc");
+
 
         RoomDao dao = this.getRoomDao();
         dao.saveOrUpdate(room);
@@ -22,8 +24,20 @@ public class RoomDaoTest extends AbstractDaoTest {
         assertThat(saved).isNotNull();
         assertThat(saved.getName()).isNotNull();
         assertThat(saved.getName()).isEqualTo(room.getName());
+        assertThat(saved.getDescription()).isEqualTo("TestDesc");
     }
+    @Test
+    public void testDeleteByName() {
 
+        Room room = new Room();
+        room.setName("TestRoom");
+
+        RoomDao dao = this.getRoomDao();
+        dao.saveOrUpdate(room);
+        dao.removeRoom("TestRoom");
+        Room saved = dao.findByName("TestRoom");
+        assertThat(saved).isNull();
+    }
     private RoomDao getRoomDao() {
         return this.injector.getInstance(RoomDao.class);
     }

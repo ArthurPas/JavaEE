@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import fr.iut.rm.control.ControlRoom;
+import fr.iut.rm.persistence.domain.EntryLeave;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +30,29 @@ public final class App {
      */
     private static final String CREATE = "c";
     /**
+     * delete constant
+     */
+    private static final String DELETE = "d";
+    /**
      * list constant
      */
     private static final String LIST = "l";
+    /**
+     * add access entry constant
+     */
+    private static final String ADDENTRY = "a";
+    /**
+     * add access leave constant
+     */
+    private static final String ADDLEAVE= "b";
+    /**
+     * list all access for a room
+     */
+    private static final String LISTACCESSBYROOM= "z";
+    /**
+     * list all access for a person
+     */
+    private static final String LISTACCESSBYPERSON= "y";
 
     /**
      * standard logger
@@ -51,9 +72,14 @@ public final class App {
     public App() {
         // build options command line options
         options.addOption(OptionBuilder.withDescription("List all rooms").create(LIST));
-        options.addOption(OptionBuilder.withArgName("name").hasArg().withDescription("Create new room").create(CREATE));
+        options.addOption(OptionBuilder.withArgName("name").hasArgs(2).withDescription("Create new room").create(CREATE));
+        options.addOption(OptionBuilder.withArgName("name").hasArgs(2).withDescription("Add an entry").create(ADDENTRY));
+        options.addOption(OptionBuilder.withArgName("name").hasArgs(2).withDescription("Add a leave").create(ADDLEAVE));
+        options.addOption(OptionBuilder.withArgName("name").hasArg().withDescription("list all the access of a room").create(LISTACCESSBYROOM));
+        options.addOption(OptionBuilder.withArgName("name").hasArg().withDescription("list all the access of a person").create(LISTACCESSBYPERSON));
         options.addOption(OptionBuilder.withDescription("Display help message").create(HELP));
         options.addOption(OptionBuilder.withDescription("Quit").create(QUIT));
+        options.addOption(OptionBuilder.withArgName("name").hasArg().withDescription("delete a room").create(DELETE));
     }
 
 
@@ -79,12 +105,58 @@ public final class App {
                 } else if (cmd.hasOption(LIST)) {
                     cr.showRooms();
                 } else if (cmd.hasOption(CREATE)) {
-                    String name = cmd.getOptionValue(CREATE);
+                    String[] creationOptions = cmd.getOptionValues(CREATE);
+                    if(creationOptions.length == 0 ){
+                        logger.warn("specify at least the name of the room ");
+                    }
+                    String name = creationOptions[0];
+                    String desc = null;
+                    if(creationOptions.length > 1 ){
+                        desc = creationOptions[1];
+                    }
+                    cr.createRoom(name,desc);
+                } else if (cmd.hasOption(DELETE)) {
+                    String name = cmd.getOptionValue(DELETE);
                     if (name != null && !name.isEmpty()) {
-                        cr.createRoom(name);
+                        cr.deleteRoom(name);
+                    }
+                }else if (cmd.hasOption(ADDENTRY)) {
+                    String[] addOptions = cmd.getOptionValues(ADDENTRY);
+                    if(addOptions.length <2 ){
+                        System.out.println("specify the name and the room ");
+                    }
+                    else {
+                        String name = addOptions[0];
+                        String room = addOptions[1];
+                        cr.addAccess(room,name,EntryLeave.ENTRY);
                     }
                 }
-
+                else if (cmd.hasOption(ADDLEAVE)) {
+                    String[] addOptions = cmd.getOptionValues(ADDLEAVE);
+                    if(addOptions.length <2 ){
+                        System.out.println("specify the name and the room ");
+                    }
+                    else {
+                        String name = addOptions[0];
+                        String room = addOptions[1];
+                        cr.addAccess(room,name,EntryLeave.LEAVE);
+                    }
+                } else if (cmd.hasOption(LISTACCESSBYROOM)) {
+                    String listOption = cmd.getOptionValue(LISTACCESSBYROOM);
+                    if (listOption.isEmpty()) {
+                        System.out.println("specify the room ");
+                    } else {
+                        cr.showAccessByRoom(listOption);
+                    }
+                }else if (cmd.hasOption(LISTACCESSBYPERSON)) {
+                    String listOption = cmd.getOptionValue(LISTACCESSBYPERSON);
+                    if(listOption.isEmpty()){
+                        System.out.println("specify the person ");
+                    }
+                    else {
+                        cr.showAccessByPerson(listOption);
+                    }
+                }
             } catch (ParseException e) {
                 e.printStackTrace();
                 showHelp();
