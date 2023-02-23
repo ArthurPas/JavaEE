@@ -1,30 +1,26 @@
 package fr.iut;
+
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
+import javax.inject.Singleton;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-@WebServlet(name = "room", urlPatterns = {"/room"})
-public class RoomServlet extends HttpServlet {
-
-
-    protected List<Room> fillRoom(){
-        List<Room> listOfRoom = new ArrayList<Room>();
-        listOfRoom.add(new Room("Room1",0,10));
-        listOfRoom.add(new Room("Room2",5,30));
-        listOfRoom.add(new Room("Room3",10,10));
-        return listOfRoom;
-    }
-
+@WebServlet(name = "protected", urlPatterns = {"/protected"})
+@ServletSecurity(@HttpConstraint(rolesAllowed = "application"))
+@Singleton
+public class ProtectedServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
@@ -36,14 +32,13 @@ public class RoomServlet extends HttpServlet {
         freemarkerConfiguration.setObjectWrapper(new DefaultObjectWrapper());
         try {
             freemarkerTemplate =
-                    freemarkerConfiguration.getTemplate("templates/listRoom.ftl");
+                    freemarkerConfiguration.getTemplate("templates/login.ftl");
         } catch (IOException e) {
             System.out.println("Unable to process request,error during freemarker template retrieval.");  }
-        List<Room> fakeRooms = fillRoom();
+
         Map<String, Object> root = new HashMap<String, Object>();
         // navigation data and links
         root.put("title", "freemarker Servlet");
-        root.put("fakeRooms",fakeRooms);
         PrintWriter out = response.getWriter();
         assert freemarkerTemplate != null;
         try {
@@ -54,4 +49,3 @@ public class RoomServlet extends HttpServlet {
         response.setContentType("text/html");
     }
 }
-
