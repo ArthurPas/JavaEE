@@ -1,0 +1,20 @@
+<FindBugsFilter>
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP" />
+    </Match>
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2" />
+    </Match>
+    <Match>
+        <Bug pattern="UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD" />
+    </Match>
+    <Match>
+        <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" />
+    </Match>
+    <Match>
+        <Bug pattern="HE_INHERITS_EQUALS_USE_HASHCODE" />
+    </Match>
+    <Match>
+        <Class name="~fr.iut.rm.persistence.domain.*_.*" />
+    </Match>
+</FindBugsFilter>
